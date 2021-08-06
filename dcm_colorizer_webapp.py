@@ -124,10 +124,10 @@ if rawimage:
     colorcheck = st.sidebar.checkbox('Choose colors manually?')
     if colorcheck:
         if boundscheck:
-            colorcols = st.sidebar.beta_columns(len(list(txtbounds.split(',')))+1)
+            colorcols = st.sidebar.columns(len(list(txtbounds.split(',')))+1)
         else:
             groups = math.ceil((10-math.floor(sorted_dcm.count(-2048)/len(sorted_dcm) * 10))/2)+1
-            colorcols = st.sidebar.beta_columns(groups)
+            colorcols = st.sidebar.columns(groups)
         colordict = {}
         for i, x in enumerate(colorcols):
             x.color_picker(str(i), key = str(i))
