@@ -110,16 +110,12 @@ def hex_to_rgb(hex):
 st.title('DICOM Colorizer')
 rawimage = st.sidebar.file_uploader('Load DICOM image', type=['dcm'])
 if rawimage:
-    dcm = dicom.dcmread(rawimage)
-    sorted_dcm = list(dcm.pixel_array.flatten())
-    sorted_dcm.sort()
-    second_lowest = sorted_dcm[sorted_dcm.count(sorted_dcm[0])]
-    highest = sorted_dcm[-1]
     boundscheck = st.sidebar.checkbox('Choose bounds manually?')
-    boundsminmax = st.sidebar.write(f"Min = {lowhigh(rawimage)[0]}, Max = {lowhigh(rawimage)[1]}")
     if boundscheck:
+        boundsminmax = st.sidebar.write(f"Min = {lowhigh(rawimage)[0]}, Max = {lowhigh(rawimage)[1]}")
         txtbounds = st.sidebar.text_input('Enter bounds (split by commas): ')
     else:
+        boundsminmax = st.sidebar.empty()
         txtbounds = st.sidebar.empty()
     colorcheck = st.sidebar.checkbox('Choose colors manually?')
     if colorcheck:
