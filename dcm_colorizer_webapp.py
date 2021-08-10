@@ -5,6 +5,7 @@ import numpy as np
 import random
 import streamlit as st
 import math
+import pandas as pd
 #import all packages
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -152,16 +153,11 @@ if rawimage:
                 bounds[n] = int(bounds[n])
         rawimage.seek(0)
         fig, averages, stds = colorizedcm(rawimage, bounds, colors)
-        averages_table = np.ndarray((len(averages)+1, 3), dtype=str)
         bounds_ranges = []
         for i in range(len(bounds)-1):
             bounds_ranges.append(f'{bounds[i]} to {bounds[i+1]}')
-        averages_table[0,0] = 'Bounds'
-        averages_table[0,1] = 'Average HU Value'
-        averages_table[0,2] = 'Standard Deviation'
-        averages_table[0,1:] = bounds_ranges
-        averages_table[1,1:] = averages
-        averages_table[2,1:] = stds
+        d = {"Bounds": bounds_ranges, "Average HU Value": averages, "Standard Deviation": stds}
+        averages_table = pd.DataFrame(d)
         st.dataframe(averages_table)
         st.pyplot(fig)
         
