@@ -152,7 +152,7 @@ if rawimage:
                 bounds[n] = int(bounds[n])
         rawimage.seek(0)
         fig, averages, stds = colorizedcm(rawimage, bounds, colors)
-        averages_table = np.ndarray((len(averages)+1, 3))
+        averages_table = np.ndarray((len(averages)+1, 3), dtype=str)
         bounds_ranges = []
         for i in range(len(bounds)-1):
             bounds_ranges.append(f'{bounds[i]} to {bounds[i+1]}')
