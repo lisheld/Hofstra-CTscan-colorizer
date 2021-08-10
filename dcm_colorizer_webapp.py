@@ -17,7 +17,6 @@ def lowhigh(image):
 
 
 def colorizedcm(image, bounds, colors):
-    image.seek(0)
     if bounds != []:
         bounds = list(bounds)
         bounds.sort()
@@ -28,6 +27,7 @@ def colorizedcm(image, bounds, colors):
             if bounds.count(num) > 1:
                 st.error(f'Bounds must contain all unique elements. {num} is repeated.')
                 return None
+    image.seek(0)
     dcm = dicom.dcmread(image)
     dcm_image = dcm.pixel_array
 
