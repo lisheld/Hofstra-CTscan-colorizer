@@ -143,7 +143,6 @@ if rawimage:
         if colorcheck:
             for i, x in enumerate(colorcols):
                 colors.append(hex_to_rgb(st.session_state[str(i)]))
-            print(colors)
         if boundscheck:
             bounds = list(txtbounds.split(','))
             for n in range(len(bounds)):
