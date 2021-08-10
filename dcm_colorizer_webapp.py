@@ -9,17 +9,8 @@ import math
 
 def colorizedcm(image, bounds, colors):
     if bounds != []:
-        for i in range(len(bounds)-1):
-            if bounds[i]>bounds[i+1]:
-                st.error(f'Bounds are not increasing, {bounds[i]} is greater than {bounds[i+1]}.')
-                return None
-    if colors != [] and bounds != [] and len(colors) != len(bounds) + 1:
-        st.error(f'Colors should have one more element than bounds. Bounds contains {len(bounds)} element(s), and colors contains {len(colors)} element(s)')
-        return None
-    for i in range(len(colors)):
-            if colors.count(colors[i]) > 1:
-                st.error(f'Colors should contain all distinct elements. {colors[i]} is repeated.')
-                return None
+        bounds = list(bounds)
+        bounds.sort()
     dcm = dicom.dcmread(image)
     dcm_image = dcm.pixel_array
 
