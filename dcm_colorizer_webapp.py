@@ -107,7 +107,7 @@ def colorizedcm(image, bounds, colors):
     ax3.set_yticks([0,len(dcm_noborder)/2, len(dcm_noborder)])
     ax3.set_yticklabels([0,50,100])
     ax3.set_ylabel('Occurence Ratio [%]')
-    return f, average_hus, std_hus
+    return f, average_hus, std_hus, bounds
 
 def hex_to_rgb(hex):
     hex = hex.lstrip('#')
@@ -152,15 +152,16 @@ if rawimage:
             for n in range(len(bounds)):
                 bounds[n] = int(bounds[n])
         rawimage.seek(0)
-        fig, averages, stds = colorizedcm(rawimage, bounds, colors)
+        fig, averages, stds, bounds = colorizedcm(rawimage, bounds, colors)
+        st.pyplot(fig)
         bounds_ranges = []
         for i in range(len(bounds)-1):
             bounds_ranges.append(f'{bounds[i]} to {bounds[i+1]}')
-        print(len(bounds_ranges), len(averages), len(stds))
-        d = {"Bounds": bounds_ranges, "Average HU Value": averages, "Standard Deviation": stds}
-        averages_table = pd.DataFrame(d)
+        averages = [math.trunc(i) for i in list(np.around(np.array(averages)))]
+        stds = [math.trunc(i) for i in list(np.around(np.array(stds)))]
+        d = {"Average HU Value": averages, "Standard Deviation": stds}
+        averages_table = pd.DataFrame(d, index=bounds_ranges)
         st.dataframe(averages_table)
-        st.pyplot(fig)
         
 else:
     boundscheck = st.sidebar.empty()
