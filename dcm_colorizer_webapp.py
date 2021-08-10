@@ -122,7 +122,10 @@ if rawimage:
         if boundscheck:
             colorcols = st.sidebar.columns(len(list(txtbounds.split(',')))+1)
         else:
-            groups = math.ceil((10-math.floor(sorted_dcm.count(-2048)/len(sorted_dcm) * 10))/2)+1
+            rawimage.seek(0)
+            dcm = dicom.dcmread(rawimage)
+            dcm_image = dcm.pixel_array
+            groups = math.ceil((10-math.floor(dcm_image.count(-2048)/dcm_image.size * 10))/2)+1
             colorcols = st.sidebar.columns(groups)
         colordict = {}
         for i, x in enumerate(colorcols):
