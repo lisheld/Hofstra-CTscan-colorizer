@@ -7,10 +7,26 @@ import streamlit as st
 import math
 #import all packages
 
+
+def lowhigh(image):
+    image.seek(0)
+    dcm = dicom.read_file(image)
+    sorted_dcm = list(dcm.pixel_array.flatten())
+    sorted_dcm.sort()
+    return sorted_dcm[sorted_dcm.count(sorted_dcm[0])], sorted_dcm[-1]
+
+
 def colorizedcm(image, bounds, colors):
     if bounds != []:
         bounds = list(bounds)
         bounds.sort()
+        if min(bounds) <= lowhigh(image)[0] or max(bounds) >= lowhigh(image)[1]:
+            st.error(f'Bounds must be in between the lowest and highest value of the image ({lowhigh(image)[0]} and {lowhigh(image)[1]}).')
+            return None
+        for num in bounds:
+            if bounds.count(num) > 1:
+                st.error(f'Bounds must contain all unique elements. {num} is repeated.')
+                return None
     dcm = dicom.dcmread(image)
     dcm_image = dcm.pixel_array
 
@@ -29,14 +45,12 @@ def colorizedcm(image, bounds, colors):
     else:
         bounds.insert(0, second_lowest)
         bounds.append(dcm_image.max())
-    print(bounds)
 
     if colors == []:
         colors = np.random.randint(0,255,(len(bounds)+1,3))
     else:
         colors = np.array(colors)
     colors = colors/255
-    print(colors)
 
     shaded_image = np.zeros((512,512,3))
     factor = 0.3
@@ -47,12 +61,16 @@ def colorizedcm(image, bounds, colors):
         color_midpoint = (lower+upper)/2
         mask_lower = ((dcm_image < color_midpoint) & (dcm_image >= lower))
         mask_upper = ((dcm_image >= color_midpoint) & (dcm_image < upper))
+        general_mask = ((dcm_image >= lower) & (dcm_image < upper))
         shadefactor = ((2*factor)/(upper-lower))*abs(dcm_image-color_midpoint)
         for v in range(3):
             changed_color = color[v] * (1 - shadefactor)
             np.putmask(shaded_image[:,:,v], mask_lower, changed_color)
             changed_color = color[v] + (255 - color[v]) * shadefactor
             np.putmask(shaded_image[:,:,v], mask_upper, changed_color)
+        average_hu = np.mean(dcm_image, where=general_mask)
+        std_hu = np.std(dcm_image, where=general_mask)
+        print(average_hu, std_hu)
 
 
     shaded_image[dcm_image == dcm_image.min()] = [255,255,255]
@@ -86,13 +104,6 @@ def colorizedcm(image, bounds, colors):
     ax3.set_yticklabels([0,50,100])
     ax3.set_ylabel('Occurence Ratio [%]')
     return f
-
-def lowhigh(image):
-    image.seek(0)
-    dcm = dicom.read_file(image)
-    sorted_dcm = list(dcm.pixel_array.flatten())
-    sorted_dcm.sort()
-    return sorted_dcm[sorted_dcm.count(sorted_dcm[0])], sorted_dcm[-1]
 
 def hex_to_rgb(hex):
     hex = hex.lstrip('#')
