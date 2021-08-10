@@ -156,6 +156,7 @@ if rawimage:
         bounds_ranges = []
         for i in range(len(bounds)-1):
             bounds_ranges.append(f'{bounds[i]} to {bounds[i+1]}')
+        print(len(bounds_ranges), len(averages), len(stds))
         d = {"Bounds": bounds_ranges, "Average HU Value": averages, "Standard Deviation": stds}
         averages_table = pd.DataFrame(d)
         st.dataframe(averages_table)
