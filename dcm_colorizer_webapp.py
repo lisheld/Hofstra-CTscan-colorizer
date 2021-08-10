@@ -152,8 +152,19 @@ if rawimage:
                 bounds[n] = int(bounds[n])
         rawimage.seek(0)
         fig, averages, stds = colorizedcm(rawimage, bounds, colors)
+        averages_table = np.ndarray((len(averages)+1, 3))
+        bounds_ranges = []
+        for i in len(bounds)-1:
+            bounds_ranges.append(f'{bounds[i]} to {bounds[i+1]}')
+        averages_table[0,0] = 'Bounds'
+        averages_table[0,1] = 'Average HU Value'
+        averages_table[0,2] = 'Standard Deviation'
+        averages_table[0,1:] = bounds_ranges
+        averages_table[1,1:] = averages
+        averages_table[2,1:] = stds
+        st.dataframe(averages_table)
         st.pyplot(fig)
-        print(averages, stds)
+        
 else:
     boundscheck = st.sidebar.empty()
     boundsminmax = st.sidebar.empty()
