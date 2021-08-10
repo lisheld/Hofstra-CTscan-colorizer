@@ -154,7 +154,7 @@ if rawimage:
         fig, averages, stds = colorizedcm(rawimage, bounds, colors)
         averages_table = np.ndarray((len(averages)+1, 3))
         bounds_ranges = []
-        for i in len(bounds)-1:
+        for i in range(len(bounds)-1):
             bounds_ranges.append(f'{bounds[i]} to {bounds[i+1]}')
         averages_table[0,0] = 'Bounds'
         averages_table[0,1] = 'Average HU Value'
