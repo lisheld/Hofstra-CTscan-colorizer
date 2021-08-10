@@ -56,6 +56,8 @@ def colorizedcm(image, bounds, colors):
 
     shaded_image = np.zeros((512,512,3))
     factor = 0.3
+    average_hus = []
+    std_hus = []
     for i in range(len(bounds)-1):
         upper = bounds[i+1]
         lower = bounds[i]
@@ -70,9 +72,8 @@ def colorizedcm(image, bounds, colors):
             np.putmask(shaded_image[:,:,v], mask_lower, changed_color)
             changed_color = color[v] + (255 - color[v]) * shadefactor
             np.putmask(shaded_image[:,:,v], mask_upper, changed_color)
-        average_hu = np.mean(dcm_image, where=general_mask)
-        std_hu = np.std(dcm_image, where=general_mask)
-        print(average_hu, std_hu)
+        average_hus.append(np.mean(dcm_image, where=general_mask))
+        std_hus.append(np.std(dcm_image, where=general_mask))
 
 
     shaded_image[dcm_image == dcm_image.min()] = [255,255,255]
@@ -105,7 +106,7 @@ def colorizedcm(image, bounds, colors):
     ax3.set_yticks([0,len(dcm_noborder)/2, len(dcm_noborder)])
     ax3.set_yticklabels([0,50,100])
     ax3.set_ylabel('Occurence Ratio [%]')
-    return f
+    return f, average_hus, std_hus
 
 def hex_to_rgb(hex):
     hex = hex.lstrip('#')
@@ -133,7 +134,7 @@ if rawimage:
             colorcols = st.sidebar.columns(groups)
         colordict = {}
         for i, x in enumerate(colorcols):
-            x.color_picker(str(i), key = str(i))
+            x.color_picker(str(i+1), key = str(i+1))
     else:
         colorcols = st.sidebar.empty()
 
@@ -144,13 +145,15 @@ if rawimage:
         bounds = []
         if colorcheck:
             for i, x in enumerate(colorcols):
-                colors.append(hex_to_rgb(st.session_state[str(i)]))
+                colors.append(hex_to_rgb(st.session_state[str(i+1)]))
         if boundscheck:
             bounds = list(txtbounds.split(','))
             for n in range(len(bounds)):
                 bounds[n] = int(bounds[n])
         rawimage.seek(0)
-        st.pyplot(colorizedcm(rawimage, bounds, colors))
+        fig, averages, stds = colorizedcm(rawimage, bounds, colors)
+        st.pyplot(fig)
+        print(averages, stds)
 else:
     boundscheck = st.sidebar.empty()
     boundsminmax = st.sidebar.empty()
