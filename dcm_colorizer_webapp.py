@@ -17,6 +17,7 @@ def lowhigh(image):
 
 
 def colorizedcm(image, bounds, colors):
+    image.seek(0)
     if bounds != []:
         bounds = list(bounds)
         bounds.sort()
