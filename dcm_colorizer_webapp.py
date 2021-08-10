@@ -124,7 +124,7 @@ if rawimage:
         else:
             rawimage.seek(0)
             dcm = dicom.dcmread(rawimage)
-            flatten = dcm.pixel_array.flatten()
+            flatten = list(dcm.pixel_array.flatten())
             groups = math.ceil((10-math.floor(flatten.count(-2048)/len(flatten) * 10))/2)+1
             colorcols = st.sidebar.columns(groups)
         colordict = {}
