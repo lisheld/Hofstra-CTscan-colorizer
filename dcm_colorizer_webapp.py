@@ -7,6 +7,7 @@ import streamlit as st
 import math
 #import all packages
 
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 def lowhigh(image):
     image.seek(0)
