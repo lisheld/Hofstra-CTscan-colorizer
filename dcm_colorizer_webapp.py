@@ -134,7 +134,7 @@ if rawimage:
             colorcols = st.sidebar.columns(groups)
         colordict = {}
         for i, x in enumerate(colorcols):
-            x.color_picker(str(i+1), key = str(i+1))
+            x.color_picker(str(i), key = str(i))
     else:
         colorcols = st.sidebar.empty()
 
@@ -145,7 +145,7 @@ if rawimage:
         bounds = []
         if colorcheck:
             for i, x in enumerate(colorcols):
-                colors.append(hex_to_rgb(st.session_state[str(i+1)]))
+                colors.append(hex_to_rgb(st.session_state[str(i)]))
         if boundscheck:
             bounds = list(txtbounds.split(','))
             for n in range(len(bounds)):
