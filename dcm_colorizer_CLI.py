@@ -12,29 +12,34 @@ colors = []
 #Enter colors (If left blank, colors will be random)
 bounds = []
 #Enter bounds (If left blank, bounds will be automatically generated)
-
-if bounds != []:
-    for i in range(len(bounds)-1):
-        if bounds[i]>bounds[i+1]:
-            raise ValueError('Bounds are not increasing, ' + str(bounds[i]) + ' is greater than ' + str(bounds[i+1]) + '.')
-            sys.exit()
-if colors != [] and bounds != [] and len(colors) != len(bounds) + 1:
-    raise ValueError('Colors should have one more element than bounds. Bounds contains ' + str(len(bounds)) + ' element(s), and colors contains ' + str(len(colors)) + ' element(s).')
-    sys.exit()
-if colors != []:
-    for i in range(len(colors)):
-            if colors.count(colors[i]) > 1:
-                raise ValueError('Colors should contain all distinct elements. ' + str(colors[i]) + ' is repeated.')
-                sys.exit()
-
-
 loc = r"/path/to/dicom/directory"
 fn = r"/(name of dicom file).dcm"
 
 
+def lowhigh(image):
+    image.seek(0)
+    dcm = dicom.read_file(image)
+    sorted_dcm = list(dcm.pixel_array.flatten())
+    sorted_dcm.sort()
+    return sorted_dcm[sorted_dcm.count(sorted_dcm[0])], sorted_dcm[-1]
+
+
+if bounds != []:
+    bounds = list(bounds)
+    bounds.sort()
+    if min(bounds) <= lowhigh(loc+fn)[0] or max(bounds) >= lowhigh(loc+fn)[1]:
+        raise ValueError(f'Bounds must be in between the lowest and highest value of the image ({lowhigh(loc+fn)[0]} and {lowhigh(loc+fn)[1]}).')
+        sys.exit()
+    for num in bounds:
+        if bounds.count(num) > 1:
+            raise ValueError(f'Bounds must contain all unique elements. {num} is repeated.')
+            sys.exit()
+if colors != [] and bounds != [] and len(colors) != len(bounds) + 1:
+        raise ValueError(f'Colors should have one more element than bounds. Bounds contains {str(len(bounds))} element(s), and colors contains {str(len(colors))} element(s).')
+        sys.exit()
+
 dcm = dicom.read_file(loc+fn)
 dcm_image = dcm.pixel_array
-
 
 sorted_dcm = list(dcm_image.flatten())
 sorted_dcm.sort()
