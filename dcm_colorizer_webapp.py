@@ -38,7 +38,6 @@ def colorizedcm(image, bounds, colors):
     second_lowest = sorted_dcm[sorted_dcm.count(sorted_dcm[0])]
 
 
-
     if bounds == []:
         groups = math.ceil((10-math.floor(sorted_dcm.count(-2048)/len(sorted_dcm) * 10))/2)+1
         diff = (sorted_dcm[-1]-second_lowest)/(groups)
@@ -54,6 +53,9 @@ def colorizedcm(image, bounds, colors):
     else:
         colors = np.array(colors)
     colors = colors/255
+
+    print(bounds)
+    print(colors)
 
     shaded_image = np.zeros((512,512,3))
     factor = 0.3
@@ -162,7 +164,7 @@ if rawimage:
         d = {"Average HU Value": averages, "Standard Deviation": stds}
         averages_table = pd.DataFrame(d, index=bounds_ranges)
         st.dataframe(averages_table)
-        
+
 else:
     boundscheck = st.sidebar.empty()
     boundsminmax = st.sidebar.empty()
