@@ -5,7 +5,7 @@ Users select a DICOM file (.dcm) to colorize and can enter "bounds" and colors.
 
 The "bounds" are the values in HU (Hounsfield Units) that define the ranges for which each color is applied. For example, if the bounds are -700 and 300, a pixel that has a HU value of less than -700 is one color, a pixel that is between -700 and 300 is a different color, and a pixel that is greater than 300 is a third color. Thus, there must be one more color than the amount of bounds. Colors apply from least to greatest, so the first color is for the lowest range, and the last color is for the highest range.
 
-There is also a shading algorithm applied to each image. If a pixel is above the midpoint of it's defined range, it is lightened, and if it is below, it is darkened. The farther away from the midpoint it is, the stronger the effect. For example, if two bounds are defined as 0 and 100, and the color is red for that section, pixels larger than 50 would be a lighter shade of red, and those smaller than 50 would be a darker shade.
+There is also a shading algorithm applied to each image. If a pixel is above the midpoint of it's defined range, it is lightened, and if it is below, it is darkened. The farther away from the midpoint it is, the stronger the effect. For example, if two bounds are defined as 0 and 100, and the color within the bounds is red, pixels larger than 50 would be a lighter shade of red, and those smaller than 50 would be a darker shade.
 
 If no bounds are specified, the program will automatically generate a certain number of bounds depending on how large the actual image is (excluding the dead space around it).
 
