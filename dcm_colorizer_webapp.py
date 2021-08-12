@@ -49,7 +49,8 @@ def colorizedcm(image, bounds, colors):
         bounds.append(dcm_image.max())
 
     if colors == []:
-        colors = np.random.randint(0,255,(len(bounds)+1,3))
+
+        colors = np.random.randint(0,255,(len(bounds)-1,3))
     else:
         colors = np.array(colors)
     colors = colors/255
