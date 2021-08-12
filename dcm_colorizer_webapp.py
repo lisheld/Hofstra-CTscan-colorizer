@@ -54,8 +54,8 @@ def colorizedcm(image, bounds, colors):
         colors = np.array(colors)
     colors = colors/255
 
-    print(bounds)
-    print(colors)
+    st.write(bounds)
+    st.write(colors)
 
     shaded_image = np.zeros((512,512,3))
     factor = 0.3
