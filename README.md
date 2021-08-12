@@ -19,6 +19,8 @@ If no colors are specified, the program randomly generates them.
 
 - Numpy
 
+- Pandas (For web app version)
+
 - Streamlit (For web app version)
 
 # Setup:
