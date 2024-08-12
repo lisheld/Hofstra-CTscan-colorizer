@@ -25,8 +25,6 @@ If no colors are specified, the program randomly generates them.
 
 # Setup:
 
-- Accessible via website at https://share.streamlit.io/liamsheldonn/hofstra-ctscan-colorizer/main/dcm_colorizer_webapp.py
-
 For running via computer:
 
 - Download DCM_colorizer_webapp.py (for web app) or DCM_colorizer_CLI.py (for command line interface)
